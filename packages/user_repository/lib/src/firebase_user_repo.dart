@@ -63,5 +63,4 @@ class FirebaseUserRepo implements UserRepository{
         .then((value) => MyUser.fromMap(value.data()!));
     }
   });
-
 }

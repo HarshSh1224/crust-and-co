@@ -43,7 +43,7 @@ class FirebaseUserRepo implements UserRepository{
   Future<MyUser> signUp(MyUser myUser, String password) async {
     try {
       UserCredential user = await _firebaseAuth.createUserWithEmailAndPassword(email: myUser.email, password: password);
-
+      
       myUser.userId = user.user!.uid;
       return myUser;
     } catch (error) {
@@ -53,7 +53,7 @@ class FirebaseUserRepo implements UserRepository{
   }
 
   @override
-  Stream<MyUser?> get user => _firebaseAuth.authStateChanges().flatMap((firebaseUser) async* {
+  Stream<MyUser> get user => _firebaseAuth.authStateChanges().flatMap((firebaseUser) async* {
     if(firebaseUser == null){
       yield MyUser.empty;
     } else {

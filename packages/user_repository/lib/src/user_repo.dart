@@ -2,7 +2,7 @@ import 'models/user_model.dart';
 
 abstract class UserRepository{
 
-  Stream<MyUser?> get user;
+  Stream<MyUser> get user;
 
   Future<MyUser> signUp(MyUser myUser, String password);
   

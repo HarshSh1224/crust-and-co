@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964084025241",
+    "project_id": "crust-b63fc",
+    "storage_bucket": "crust-b63fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964084025241:android:4054dafbdbaceabd3f3508",
+        "android_client_info": {
+          "package_name": "com.example.crust_and_co"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAelPIPfaBhJVfyysROFMGEFtc_ikqryaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,8 @@
 
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_states.dart';
+import 'package:crust_and_co/screens/auth/ui/welcome_screen.dart';
+import 'package:crust_and_co/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,9 +18,9 @@ class MyAppView extends StatelessWidget{
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if(state.status == AuthenticationStatus.authenticated){
-            return HomeScreen();
+            return const HomeScreen();
           } else {
-            return WelcomeScreen();
+            return const WelcomeScreen();
           }
         },
       ),

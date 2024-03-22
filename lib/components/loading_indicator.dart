@@ -9,20 +9,20 @@ class LoadingIndicator extends StatefulWidget {
 
 class _LoadingIndicatorState extends State<LoadingIndicator>
     with SingleTickerProviderStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-      turns: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: AnimationController(
-          duration: const Duration(milliseconds: 500),
-          vsync: this,
-        )..repeat(),
-        curve: Curves.easeInOutCirc,
-      )),
-      child: Opacity(
-        opacity: 0.4,
-        child: Image.asset('assets/images/logo.png',))
-    );
+        turns: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+          parent: AnimationController(
+            duration: const Duration(milliseconds: 1000),
+            vsync: this,
+          )..repeat(),
+          curve: Curves.fastOutSlowIn,
+        )),
+        child: Opacity(
+            opacity: 0.4,
+            child: Image.asset(
+              'assets/images/logo.png',
+            )));
   }
 }

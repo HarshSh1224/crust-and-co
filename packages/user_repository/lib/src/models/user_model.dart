@@ -1,45 +1,39 @@
 import 'dart:convert';
 
-import 'package:user_repository/constants/user_constants.dart';
-
 class MyUser {
-  String userId;
-  String? avatar;
+  String id;
+  String fullName;
   String email;
-  String name;
-  bool hasActiveCart;
 
   MyUser({
-    required this.userId,
+    required this.id,
+    required this.fullName,
     required this.email,
-    required this.name,
-    required this.hasActiveCart,
-    this.avatar,
   });
 
-  static final empty = MyUser(userId: '', email: '', name: '', hasActiveCart: false);
-
   Map<String, dynamic> toMap() {
-    return {
-      UserConstants.userId: userId,
-      UserConstants.avatar: avatar,
-      UserConstants.email: email,
-      UserConstants.name: name,
-      UserConstants.hasActiveCart: hasActiveCart,
-    };
+    final result = <String, dynamic>{};
+  
+    result.addAll({'id': id});
+    result.addAll({'fullName': fullName});
+    result.addAll({'email': email});
+  
+    return result;
   }
 
-  factory MyUser.fromMap(Map<String, dynamic> json) {
+  factory MyUser.fromMap(Map<String, dynamic> map) {
     return MyUser(
-      userId: json[UserConstants.userId] ?? '',
-      avatar: json[UserConstants.avatar],
-      email: json[UserConstants.email] ?? '',
-      name: json[UserConstants.name] ?? '',
-      hasActiveCart: json[UserConstants.hasActiveCart] ?? false,
+      id: map['_id'] ?? '',
+      fullName: map['fullName'] ?? '',
+      email: map['email'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory MyUser.fromJson(String source) => MyUser.fromMap(json.decode(source));
+
+  static MyUser get empty => MyUser(id: '', fullName: '', email: '');
+
+  bool get isNotValid => fullName.isEmpty || email.isEmpty || id.isEmpty;
 }

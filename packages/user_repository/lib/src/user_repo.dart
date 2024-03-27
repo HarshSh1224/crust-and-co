@@ -1,14 +1,12 @@
-import 'models/user_model.dart';
+import 'package:user_repository/src/models/user_model.dart';
 
-abstract class UserRepository{
+abstract class UserRepository {
+  
+  Future<bool> signIn(String email, String password);
 
-  Stream<MyUser> get user;
+  Future<bool> signUp(MyUser user, String password);
 
-  Future<MyUser> signUp(MyUser myUser, String password);
-  
-  Future<void> signIn(String email, String password);
-  
-  Future<void> signOut();
-  
-  Future<void> setUserData(MyUser user);
+  Future<bool> trySignIn();
+
+  MyUser get currentUser;
 }

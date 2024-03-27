@@ -8,10 +8,10 @@ abstract class SignInEvent extends Equatable {
 }
 
 class SignInRequired extends SignInEvent {
-  String email;
-  String password;
+  final String email;
+  final String password;
 
-  SignInRequired({
+  const SignInRequired({
     required this.email,
     required this.password,
   });

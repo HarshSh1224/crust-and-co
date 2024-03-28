@@ -16,7 +16,6 @@ class AuthenticationBloc
 
     on<AuthenticationUserChanged>((event, emit) {
       if (!event.user.isNotValid) {
-        print(userRepository.currentUser.toMap());
         emit(AuthenticationState.authenticated(event.user));
       } else {
         emit(const AuthenticationState.unauthenticated());

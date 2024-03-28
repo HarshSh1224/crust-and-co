@@ -9,11 +9,17 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final UserRepository userRepository;
   SignInBloc(this.userRepository) : super(SignInInitial()) {
     on<SignInRequired>((event, emit) async {
-      final success = await userRepository.signIn(event.email, event.password);
-      if (success) {
-        emit(SignInSuccess());
-      } else {
-        emit(const SignInError(message: 'Sign in failed'));
+      emit(SignInProcessing());
+      try {
+        final success =
+            await userRepository.signIn(event.email, event.password);
+        if (success) {
+          emit(SignInSuccess());
+        } else {
+          emit(const SignInError(message: 'Sign in failed'));
+        }
+      } on ApiException catch (e) {
+        emit(SignInError(message: e.message!));
       }
     });
   }

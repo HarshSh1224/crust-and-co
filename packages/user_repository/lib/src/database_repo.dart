@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:user_repository/src/api/api.dart';
+import 'package:user_repository/src/api/api_exception.dart';
 import 'package:user_repository/src/models/user_model.dart';
 import 'package:user_repository/src/user_repo.dart';
 
@@ -16,7 +17,7 @@ class DatabaseUserRepo implements UserRepository {
         'password': password,
       });
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         _myUser = MyUser.fromMap(response.data['data']['user']);
         return true;
       } else {
@@ -25,10 +26,11 @@ class DatabaseUserRepo implements UserRepository {
         return false;
       }
     } on DioException catch (e) {
-      print('signin failed');
-      print(e.response?.statusCode);
-      print(e.response);
-      return false;
+      throw ApiException(
+          message: e.response?.data['message'] ??
+              e.response?.statusMessage ??
+              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+          code: e.response?.statusCode);
     }
   }
 
@@ -41,7 +43,7 @@ class DatabaseUserRepo implements UserRepository {
         'fullName': myUser.fullName,
       });
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         return true;
       } else {
         print(response.statusMessage);

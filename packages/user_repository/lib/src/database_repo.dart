@@ -21,9 +21,9 @@ class DatabaseUserRepo implements UserRepository {
         _myUser = MyUser.fromMap(response.data['data']['user']);
         return true;
       } else {
-        print('signin failed');
-        print(response.statusMessage);
-        return false;
+        throw ApiException(
+            message: response.data['message'] ?? response.statusMessage,
+            code: response.statusCode);
       }
     } on DioException catch (e) {
       throw ApiException(

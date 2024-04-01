@@ -46,12 +46,16 @@ class DatabaseUserRepo implements UserRepository {
       if (response.statusCode == 200) {
         return true;
       } else {
-        print(response.statusMessage);
-        return false;
+        throw ApiException(
+            message: response.data['message'] ?? response.statusMessage,
+            code: response.statusCode);
       }
-    } catch (e) {
-      print(e);
-      return false;
+    } on DioException catch (e) {
+      throw ApiException(
+          message: e.response?.data['message'] ??
+              e.response?.statusMessage ??
+              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+          code: e.response?.statusCode);
     }
   }
 

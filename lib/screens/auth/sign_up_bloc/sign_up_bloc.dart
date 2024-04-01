@@ -6,9 +6,22 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  SignUpBloc() : super(SignUpInitial()) {
-    on<SignUpEvent>((event, emit) {
-      // TODO: implement event handler
+  final UserRepository userRepository;
+
+  SignUpBloc(this.userRepository) : super(SignUpInitial()) {
+    on<SignUpRequired>((event, emit) async {
+      emit(SignUpProcessing());
+      try {
+        final success =
+            await userRepository.signUp(event.myUser, event.password);
+        if (success) {
+          emit(SignUpSuccess());
+        } else {
+          emit(SignUpError(message: 'Sign Up failed'));
+        }
+      } on ApiException catch (e) {
+        emit(SignUpError(message: e.message!));
+      }
     });
   }
 }

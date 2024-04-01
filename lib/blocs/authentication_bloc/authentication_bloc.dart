@@ -10,13 +10,14 @@ class AuthenticationBloc
 
   AuthenticationBloc({required this.userRepository})
       : super(const AuthenticationState.unknown()) {
-    userRepository.trySignIn().then((success) {
-      add(AuthenticationUserChanged(userRepository.currentUser));
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      userRepository.trySignIn().then((success) {
+        add(AuthenticationUserChanged(userRepository.currentUser));
+      });
     });
 
     on<AuthenticationUserChanged>((event, emit) {
       if (!event.user.isNotValid) {
-        print(userRepository.currentUser.toMap());
         emit(AuthenticationState.authenticated(event.user));
       } else {
         emit(const AuthenticationState.unauthenticated());

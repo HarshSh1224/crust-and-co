@@ -1,4 +1,4 @@
-import 'package:crust_and_co/components/space.dart';
+import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/screens/auth/ui/signin_screen.dart';
 import 'package:crust_and_co/screens/auth/ui/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SignupScreen()));
+                      builder: (context) => SignupScreen(userRepository)));
                 },
                 child: const Text('Sign up')),
           ],

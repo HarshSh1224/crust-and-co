@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:user_repository/src/api/api.dart';
+import 'package:user_repository/src/api/api_exception.dart';
 import 'package:user_repository/src/models/user_model.dart';
+import 'package:user_repository/src/shared_prefs/shared_preferences.dart';
 import 'package:user_repository/src/user_repo.dart';
 
 class DatabaseUserRepo implements UserRepository {
   MyUser? _myUser;
+  String? _accessToken;
+  String? _refreshToken;
 
   final Api _api = Api();
 
@@ -16,19 +20,26 @@ class DatabaseUserRepo implements UserRepository {
         'password': password,
       });
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
+        await DevicePreferences.setAccessToken(
+            response.data['data']['accessToken']);
+        await DevicePreferences.setRefreshToken(
+            response.data['data']['refreshToken']);
         _myUser = MyUser.fromMap(response.data['data']['user']);
+        _accessToken = response.data['data']['accessToken'];
+        _refreshToken = response.data['data']['refreshToken'];
         return true;
       } else {
-        print('signin failed');
-        print(response.statusMessage);
-        return false;
+        throw ApiException(
+            message: response.data['message'] ?? response.statusMessage,
+            code: response.statusCode);
       }
     } on DioException catch (e) {
-      print('signin failed');
-      print(e.response?.statusCode);
-      print(e.response);
-      return false;
+      throw ApiException(
+          message: e.response?.data['message'] ??
+              e.response?.statusMessage ??
+              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+          code: e.response?.statusCode);
     }
   }
 
@@ -41,21 +52,58 @@ class DatabaseUserRepo implements UserRepository {
         'fullName': myUser.fullName,
       });
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         return true;
       } else {
-        print(response.statusMessage);
-        return false;
+        throw ApiException(
+            message: response.data['message'] ?? response.statusMessage,
+            code: response.statusCode);
       }
-    } catch (e) {
-      print(e);
-      return false;
+    } on DioException catch (e) {
+      throw ApiException(
+          message: e.response?.data['message'] ??
+              e.response?.statusMessage ??
+              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+          code: e.response?.statusCode);
     }
   }
 
   @override
   Future<bool> trySignIn() async {
-    Future.delayed(const Duration(seconds: 2));
+    _accessToken = await DevicePreferences.getAccessToken();
+    _refreshToken = await DevicePreferences.getRefreshToken();
+
+    print(_accessToken);
+
+    if (_accessToken != null && _refreshToken != null) {
+      try {
+        final response = await _api.sendRequest.get(
+          'users/current-user',
+          options: Options(
+            headers: {"Authorization": "Bearer $_accessToken"},
+          ),
+        );
+
+        if (response.statusCode == 200) {
+          _myUser = MyUser.fromMap(response.data['data']);
+          return true;
+        } else {
+          print(response.data['message'] ?? response.statusMessage);
+          // throw ApiException(
+          //     message: response.data['message'] ?? response.statusMessage,
+          //     code: response.statusCode);
+        }
+      } on DioException catch (e) {
+        print(e.response?.data['message'] ??
+            e.response?.statusMessage ??
+            (e.type.name.contains('Timeout') ? 'Connection Timeout' : null));
+        // throw ApiException(
+        //     message: e.response?.data['message'] ??
+        //         e.response?.statusMessage ??
+        //         (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+        //     code: e.response?.statusCode);
+      }
+    }
     _myUser = MyUser.empty;
     return false;
   }

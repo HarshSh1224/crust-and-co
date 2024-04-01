@@ -1,4 +1,4 @@
-import 'package:crust_and_co/components/space.dart';
+import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/screens/auth/ui/signin_screen.dart';
 import 'package:crust_and_co/screens/auth/ui/signup_screen.dart';
 import 'package:flutter/material.dart';

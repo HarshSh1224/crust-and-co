@@ -29,14 +29,16 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
   @override
   Widget build(BuildContext context) {
     return RotationTransition(
-        turns: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-          parent: _controller..repeat(),
-          curve: Curves.fastOutSlowIn,
-        )),
-        child: Opacity(
-            opacity: 0.4,
-            child: Image.asset(
-              'assets/images/logo.png',
-            )));
+      turns: Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: _controller..repeat(),
+        curve: Curves.fastOutSlowIn,
+      )),
+      child: Opacity(
+        opacity: 0.4,
+        child: Image.asset(
+          'assets/images/logo.png',
+        ),
+      ),
+    );
   }
 }

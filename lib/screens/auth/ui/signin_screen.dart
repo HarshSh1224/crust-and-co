@@ -1,7 +1,7 @@
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
-import 'package:crust_and_co/components/loading_indicator.dart';
-import 'package:crust_and_co/components/space.dart';
+import 'package:crust_and_co/components/widgets/loading_indicator.dart';
+import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/screens/auth/sign_in_bloc/sign_in_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

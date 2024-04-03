@@ -69,11 +69,9 @@ class DatabaseUserRepo implements UserRepository {
   }
 
   @override
-  Future<bool> trySignIn() async {
+  Future<bool> trySignIn([bool canRefreshToken = true]) async {
     _accessToken = await DevicePreferences.getAccessToken();
     _refreshToken = await DevicePreferences.getRefreshToken();
-
-    print(_accessToken);
 
     if (_accessToken != null && _refreshToken != null) {
       try {
@@ -94,14 +92,32 @@ class DatabaseUserRepo implements UserRepository {
           //     code: response.statusCode);
         }
       } on DioException catch (e) {
-        print(e.response?.data['message'] ??
-            e.response?.statusMessage ??
-            (e.type.name.contains('Timeout') ? 'Connection Timeout' : null));
-        // throw ApiException(
-        //     message: e.response?.data['message'] ??
-        //         e.response?.statusMessage ??
-        //         (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
-        //     code: e.response?.statusCode);
+        try {
+          if (e.response?.statusCode != null &&
+              e.response!.statusCode! ~/ 100 == 4 &&
+              canRefreshToken) {
+            final response = await _api.sendRequest.post('users/refresh-token',
+                data: {'refreshToken': _refreshToken});
+
+            if (response.statusCode == 200) {
+              await DevicePreferences.setAccessToken(
+                  response.data['data']['accessToken']);
+              await DevicePreferences.setRefreshToken(
+                  response.data['data']['refreshToken']);
+
+              return trySignIn(false);
+            }
+          }
+        } on DioException catch (e) {
+          print(e.response?.data['message'] ??
+              e.response?.statusMessage ??
+              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null));
+          // throw ApiException(
+          //     message: e.response?.data['message'] ??
+          //         e.response?.statusMessage ??
+          //         (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+          //     code: e.response?.statusCode);
+        }
       }
     }
     _myUser = MyUser.empty;

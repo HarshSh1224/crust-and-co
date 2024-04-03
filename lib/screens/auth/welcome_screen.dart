@@ -1,4 +1,5 @@
 import 'package:crust_and_co/components/widgets/space.dart';
+import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/ui/signin_screen.dart';
 import 'package:crust_and_co/screens/auth/ui/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +30,14 @@ class WelcomeScreen extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SigninScreen(userRepository)));
                 },
-                child: const Text('Sign in')),
+                child: const Text(AppLanguage.signIn)),
             const Space(),
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SignupScreen(userRepository)));
                 },
-                child: const Text('Sign up')),
+                child: const Text(AppLanguage.signIn)),
           ],
         )),
       ),

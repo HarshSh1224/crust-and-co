@@ -1,6 +1,7 @@
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_states.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
+import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/welcome_screen.dart';
 import 'package:crust_and_co/screens/home/home.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MyAppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Crust & Co.',
+      title: AppLanguage.crustAndCo,
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {

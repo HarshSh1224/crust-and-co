@@ -1,3 +1,4 @@
+import 'package:crust_and_co/constants/assets.dart';
 import 'package:flutter/material.dart';
 
 class LoadingIndicator extends StatefulWidget {
@@ -35,9 +36,7 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
       )),
       child: Opacity(
         opacity: 0.4,
-        child: Image.asset(
-          'assets/images/logo.png',
-        ),
+        child: Image.asset(Assets.appLogo),
       ),
     );
   }

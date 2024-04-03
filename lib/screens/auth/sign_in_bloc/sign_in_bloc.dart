@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:crust_and_co/constants/app_language.dart';
 import 'package:equatable/equatable.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -16,7 +17,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         if (success) {
           emit(SignInSuccess());
         } else {
-          emit(const SignInError(message: 'Sign in failed'));
+          emit(const SignInError(message: AppLanguage.signInFailed));
         }
       } on ApiException catch (e) {
         emit(SignInError(message: e.message!));

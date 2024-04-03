@@ -1,9 +1,11 @@
+import 'package:user_repository/src/constants/repo_language.dart';
+
 class ApiException implements Exception {
   String? message;
   int? code;
 
   ApiException({message, code}) {
-    this.message = message ?? "Something went wrong";
+    this.message = message ?? RepoLanguage.somethingWentWrong;
     this.code = code ?? 500;
   }
 

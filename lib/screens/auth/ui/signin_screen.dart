@@ -2,6 +2,7 @@ import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart'
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
+import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/sign_in_bloc/sign_in_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,11 +18,12 @@ class SigninScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
     return BlocProvider(
       create: (context) => SignInBloc(userRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Sign In'),
+          title: const Text(AppLanguage.signIn),
         ),
         body: BlocConsumer<SignInBloc, SignInState>(
           listener: (context, state) {
@@ -38,9 +40,11 @@ class SigninScreen extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is SignInProcessing) {
-              return const Center(
-                child:
-                    SizedBox(height: 85, width: 85, child: LoadingIndicator()),
+              return Center(
+                child: SizedBox(
+                    height: screenSize.height * 0.2,
+                    width: screenSize.height * 0.2,
+                    child: const LoadingIndicator()),
               );
             }
             return _form(_formKey, _emailController, _passwordController,
@@ -65,7 +69,7 @@ class SigninScreen extends StatelessWidget {
           children: <Widget>[
             TextFormField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: AppLanguage.email),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
@@ -75,7 +79,8 @@ class SigninScreen extends StatelessWidget {
             ),
             TextFormField(
               controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
+              decoration:
+                  const InputDecoration(labelText: AppLanguage.password),
               obscureText: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -91,7 +96,7 @@ class SigninScreen extends StatelessWidget {
                   onSubmit(_emailController.text, _passwordController.text);
                 }
               },
-              child: const Text('Submit'),
+              child: const Text(AppLanguage.submit),
             ),
           ],
         ),

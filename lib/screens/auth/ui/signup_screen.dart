@@ -1,6 +1,7 @@
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
+import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/sign_up_bloc/sign_up_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,15 +38,15 @@ class _SignupScreenState extends State<SignupScreen> {
       create: (context) => SignUpBloc(widget.userRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Signup'),
+          title: const Text(AppLanguage.signUp),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BlocConsumer<SignUpBloc, SignUpState>(
             listener: (context, state) {
               if (state is SignUpSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Succes. Please login.")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text(AppLanguage.successPleaseLogin)));
                 Navigator.of(context).pop();
               }
               if (state is SignUpError) {
@@ -76,7 +77,7 @@ class _SignupScreenState extends State<SignupScreen> {
           TextFormField(
             controller: _fullNameController,
             decoration: const InputDecoration(
-              labelText: 'Full Name',
+              labelText: AppLanguage.fullName,
             ),
             validator: (value) {
               if (value!.isEmpty) {
@@ -88,7 +89,7 @@ class _SignupScreenState extends State<SignupScreen> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
-              labelText: 'Email',
+              labelText: AppLanguage.email,
             ),
             validator: (value) {
               if (value!.isEmpty) {
@@ -101,7 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
           TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(
-              labelText: 'Password',
+              labelText: AppLanguage.password,
             ),
             obscureText: true,
             validator: (value) {
@@ -115,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
           TextFormField(
             controller: _confirmPasswordController,
             decoration: const InputDecoration(
-              labelText: 'Confirm Password',
+              labelText: AppLanguage.confirmPassword,
             ),
             obscureText: true,
             validator: (value) {
@@ -141,7 +142,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     myUser: myUser, password: _passwordController.text));
               }
             },
-            child: const Text('Signup'),
+            child: const Text(AppLanguage.signUp),
           ),
         ],
       ),

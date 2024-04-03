@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:user_repository/src/api/api.dart';
 import 'package:user_repository/src/api/api_exception.dart';
+import 'package:user_repository/src/api/api_routes.dart';
+import 'package:user_repository/src/constants/repo_constants.dart';
+import 'package:user_repository/src/constants/repo_language.dart';
 import 'package:user_repository/src/models/user_model.dart';
 import 'package:user_repository/src/shared_prefs/shared_preferences.dart';
 import 'package:user_repository/src/user_repo.dart';
@@ -15,30 +18,36 @@ class DatabaseUserRepo implements UserRepository {
   @override
   Future<bool> signIn(String email, String password) async {
     try {
-      final response = await _api.sendRequest.post('users/login', data: {
-        'email': email,
-        'password': password,
+      final response = await _api.sendRequest.post(ApiRoutes.login, data: {
+        RepoConstants.email: email,
+        RepoConstants.password: password,
       });
 
       if (response.statusCode == 200) {
         await DevicePreferences.setAccessToken(
-            response.data['data']['accessToken']);
+            response.data[RepoConstants.data][RepoConstants.accessToken]);
         await DevicePreferences.setRefreshToken(
-            response.data['data']['refreshToken']);
-        _myUser = MyUser.fromMap(response.data['data']['user']);
-        _accessToken = response.data['data']['accessToken'];
-        _refreshToken = response.data['data']['refreshToken'];
+            response.data[RepoConstants.data][RepoConstants.refreshToken]);
+        _myUser = MyUser.fromMap(
+            response.data[RepoConstants.data][RepoConstants.user]);
+        _accessToken =
+            response.data[RepoConstants.data][RepoConstants.accessToken];
+        _refreshToken =
+            response.data[RepoConstants.data][RepoConstants.refreshToken];
         return true;
       } else {
         throw ApiException(
-            message: response.data['message'] ?? response.statusMessage,
+            message:
+                response.data[RepoConstants.message] ?? response.statusMessage,
             code: response.statusCode);
       }
     } on DioException catch (e) {
       throw ApiException(
-          message: e.response?.data['message'] ??
+          message: e.response?.data[RepoConstants.message] ??
               e.response?.statusMessage ??
-              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+              (e.type.name.contains('Timeout')
+                  ? RepoLanguage.connectionTimeout
+                  : null),
           code: e.response?.statusCode);
     }
   }
@@ -46,24 +55,27 @@ class DatabaseUserRepo implements UserRepository {
   @override
   Future<bool> signUp(MyUser myUser, String password) async {
     try {
-      final response = await _api.sendRequest.post('users/register', data: {
-        'email': myUser.email,
-        'password': password,
-        'fullName': myUser.fullName,
+      final response = await _api.sendRequest.post(ApiRoutes.register, data: {
+        RepoConstants.email: myUser.email,
+        RepoConstants.password: password,
+        RepoConstants.fullName: myUser.fullName,
       });
 
       if (response.statusCode == 200) {
         return true;
       } else {
         throw ApiException(
-            message: response.data['message'] ?? response.statusMessage,
+            message:
+                response.data[RepoConstants.message] ?? response.statusMessage,
             code: response.statusCode);
       }
     } on DioException catch (e) {
       throw ApiException(
-          message: e.response?.data['message'] ??
+          message: e.response?.data[RepoConstants.message] ??
               e.response?.statusMessage ??
-              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
+              (e.type.name.contains('Timeout')
+                  ? RepoLanguage.connectionTimeout
+                  : null),
           code: e.response?.statusCode);
     }
   }
@@ -76,47 +88,41 @@ class DatabaseUserRepo implements UserRepository {
     if (_accessToken != null && _refreshToken != null) {
       try {
         final response = await _api.sendRequest.get(
-          'users/current-user',
+          ApiRoutes.currentUser,
           options: Options(
             headers: {"Authorization": "Bearer $_accessToken"},
           ),
         );
 
         if (response.statusCode == 200) {
-          _myUser = MyUser.fromMap(response.data['data']);
+          _myUser = MyUser.fromMap(response.data[RepoConstants.data]);
           return true;
         } else {
-          print(response.data['message'] ?? response.statusMessage);
-          // throw ApiException(
-          //     message: response.data['message'] ?? response.statusMessage,
-          //     code: response.statusCode);
+          print(response.data[RepoConstants.message] ?? response.statusMessage);
         }
       } on DioException catch (e) {
         try {
           if (e.response?.statusCode != null &&
               e.response!.statusCode! ~/ 100 == 4 &&
               canRefreshToken) {
-            final response = await _api.sendRequest.post('users/refresh-token',
-                data: {'refreshToken': _refreshToken});
+            final response = await _api.sendRequest.post(ApiRoutes.refreshToken,
+                data: {RepoConstants.refreshToken: _refreshToken});
 
             if (response.statusCode == 200) {
               await DevicePreferences.setAccessToken(
-                  response.data['data']['accessToken']);
-              await DevicePreferences.setRefreshToken(
-                  response.data['data']['refreshToken']);
+                  response.data[RepoConstants.data][RepoConstants.accessToken]);
+              await DevicePreferences.setRefreshToken(response
+                  .data[RepoConstants.data][RepoConstants.refreshToken]);
 
               return trySignIn(false);
             }
           }
         } on DioException catch (e) {
-          print(e.response?.data['message'] ??
+          print(e.response?.data[RepoConstants.message] ??
               e.response?.statusMessage ??
-              (e.type.name.contains('Timeout') ? 'Connection Timeout' : null));
-          // throw ApiException(
-          //     message: e.response?.data['message'] ??
-          //         e.response?.statusMessage ??
-          //         (e.type.name.contains('Timeout') ? 'Connection Timeout' : null),
-          //     code: e.response?.statusCode);
+              (e.type.name.contains('Timeout')
+                  ? RepoLanguage.connectionTimeout
+                  : null));
         }
       }
     }

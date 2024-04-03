@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:user_repository/src/constants/repo_constants.dart';
+
 class MyUser {
   String id;
   String fullName;
@@ -13,19 +15,19 @@ class MyUser {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
-    result.addAll({'id': id});
-    result.addAll({'fullName': fullName});
-    result.addAll({'email': email});
-  
+
+    result.addAll({RepoConstants.id: id});
+    result.addAll({RepoConstants.fullName: fullName});
+    result.addAll({RepoConstants.email: email});
+
     return result;
   }
 
   factory MyUser.fromMap(Map<String, dynamic> map) {
     return MyUser(
-      id: map['_id'] ?? '',
-      fullName: map['fullName'] ?? '',
-      email: map['email'] ?? '',
+      id: map[RepoConstants.underscoreId] ?? '',
+      fullName: map[RepoConstants.fullName] ?? '',
+      email: map[RepoConstants.email] ?? '',
     );
   }
 

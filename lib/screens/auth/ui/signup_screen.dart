@@ -1,5 +1,3 @@
-import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
 import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/sign_up_bloc/sign_up_bloc.dart';
@@ -56,9 +54,12 @@ class _SignupScreenState extends State<SignupScreen> {
             },
             builder: (context, state) {
               if (state is SignUpProcessing) {
-                return const Center(
+                final screenHeight = MediaQuery.of(context).size.height;
+                return Center(
                   child: SizedBox(
-                      height: 85, width: 85, child: LoadingIndicator()),
+                      height: screenHeight * 0.1,
+                      width: screenHeight * 0.1,
+                      child: const LoadingIndicator()),
                 );
               }
               return _signupForm(context);

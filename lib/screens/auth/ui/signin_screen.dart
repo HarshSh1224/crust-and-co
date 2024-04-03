@@ -42,8 +42,8 @@ class SigninScreen extends StatelessWidget {
             if (state is SignInProcessing) {
               return Center(
                 child: SizedBox(
-                    height: screenSize.height * 0.2,
-                    width: screenSize.height * 0.2,
+                    height: screenSize.height * 0.1,
+                    width: screenSize.height * 0.1,
                     child: const LoadingIndicator()),
               );
             }

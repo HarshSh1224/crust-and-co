@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SignupScreen(userRepository)));
                 },
-                child: const Text(AppLanguage.signIn)),
+                child: const Text(AppLanguage.signUp)),
           ],
         )),
       ),

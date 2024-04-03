@@ -131,5 +131,12 @@ class DatabaseUserRepo implements UserRepository {
   }
 
   @override
+  Future<void> signOut() async {
+    await DevicePreferences.setAccessToken("");
+    await DevicePreferences.setRefreshToken("");
+    _myUser = MyUser.empty;
+  }
+
+  @override
   MyUser get currentUser => _myUser ?? MyUser.empty;
 }

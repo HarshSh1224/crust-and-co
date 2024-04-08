@@ -1,4 +1,5 @@
 import 'package:crust_and_co/blocs/theme_bloc/theme_bloc.dart';
+import 'package:crust_and_co/components/widgets/hyperlinked_text.dart';
 import 'package:crust_and_co/components/widgets/primary_button.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/constants/app_language.dart';
@@ -37,9 +38,14 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              Assets.appLogoText,
-              height: 40,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  Assets.appLogoText,
+                  height: 40,
+                ),
+              ],
             ),
             const Spacer(),
             Text(
@@ -55,6 +61,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
             const Space(),
             const Space(),
+            const Space(),
             Row(
               children: [
                 Expanded(
@@ -68,21 +75,30 @@ class WelcomeScreen extends StatelessWidget {
               ],
             ),
             const Space(),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SignupScreen(userRepository)));
-                },
-                child: const Text(AppLanguage.signUp)),
             const Space(),
-            ElevatedButton(
-                onPressed: () {
-                  context.read<ThemeBloc>().add(ThemeChanged(
-                      theme.themeType == ThemeType.dark
-                          ? ThemeType.light
-                          : ThemeType.dark));
-                },
-                child: const Text('Theme')),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Don\'t have an account? ',
+                  style: GoogleFonts.rubik(color: Colors.grey),
+                ),
+                HyperlinkedText(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignupScreen(userRepository)));
+                  },
+                  text: 'Sign Up',
+                  style: GoogleFonts.rubik(
+                      color: Colors.grey, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            const Space(),
+            const Space(),
+            const Space(),
+            const Space(),
+            const Space(),
           ],
         ),
       ),

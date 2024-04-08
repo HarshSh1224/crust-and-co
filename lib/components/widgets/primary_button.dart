@@ -23,7 +23,7 @@ class PrimaryButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: onPressed,
             child: Center(
               child: Text(
                 text,

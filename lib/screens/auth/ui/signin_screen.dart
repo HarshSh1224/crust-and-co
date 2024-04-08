@@ -1,7 +1,9 @@
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
+import 'package:crust_and_co/blocs/theme_bloc/theme_bloc.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
+import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/app_language.dart';
 import 'package:crust_and_co/screens/auth/sign_in_bloc/sign_in_bloc.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +21,11 @@ class SigninScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final theme = BlocProvider.of<ThemeBloc>(context).crustTheme;
     return BlocProvider(
       create: (context) => SignInBloc(userRepository),
       child: Scaffold(
+        backgroundColor: theme.background,
         appBar: AppBar(
           title: const Text(AppLanguage.signIn),
         ),
@@ -67,27 +71,16 @@ class SigninScreen extends StatelessWidget {
         key: formKey,
         child: Column(
           children: <Widget>[
-            TextFormField(
+            TextInput(
               controller: emailController,
-              decoration: const InputDecoration(labelText: AppLanguage.email),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your email';
-                }
-                return null;
-              },
+              hintText: AppLanguage.email,
             ),
-            TextFormField(
+            const Space(),
+            const Space(),
+            TextInput(
               controller: passwordController,
-              decoration:
-                  const InputDecoration(labelText: AppLanguage.password),
+              hintText: AppLanguage.password,
               obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
-                }
-                return null;
-              },
             ),
             const Space(),
             ElevatedButton(

@@ -10,4 +10,6 @@ class AppLanguage {
   static const submit = 'Submit';
   static const successPleaseLogin = "Succes. Please login.";
   static const fullName = "Full Name";
+  static const goodCrust = "Good Crust";
+  static const tastyPizza = "Tasty Pizza...";
 }

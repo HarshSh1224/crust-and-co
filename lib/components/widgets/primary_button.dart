@@ -12,10 +12,16 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = BlocProvider.of<ThemeBloc>(context).crustTheme;
     return Container(
-      height: 50,
+      height: 53,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          boxShadow: const [BoxShadow()],
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 13,
+                offset: const Offset(1, 5),
+                color: Colors.black.withOpacity(0.9),
+                spreadRadius: 2)
+          ],
           gradient: LinearGradient(colors: [theme.primary1, theme.primary2])),
       width: double.infinity,
       child: ClipRRect(

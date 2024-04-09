@@ -1,8 +1,16 @@
+import 'package:crust_and_co/blocs/theme_bloc/crust_theme.dart';
+import 'package:crust_and_co/blocs/theme_bloc/theme_bloc.dart';
 import 'package:crust_and_co/components/widgets/loading_indicator.dart';
+import 'package:crust_and_co/components/widgets/primary_button.dart';
+import 'package:crust_and_co/components/widgets/space.dart';
+import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/app_language.dart';
+import 'package:crust_and_co/constants/assets.dart';
 import 'package:crust_and_co/screens/auth/sign_up_bloc/sign_up_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:user_repository/user_repository.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -32,107 +40,133 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BlocProvider.of<ThemeBloc>(context).crustTheme;
     return BlocProvider(
       create: (context) => SignUpBloc(widget.userRepository),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(AppLanguage.signUp),
+        backgroundColor: theme.background,
+        body: BlocConsumer<SignUpBloc, SignUpState>(
+          listener: (context, state) {
+            if (state is SignUpSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text(AppLanguage.successPleaseLogin)));
+              Navigator.of(context).pop();
+            }
+            if (state is SignUpError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.message)));
+            }
+          },
+          builder: (context, state) {
+            if (state is SignUpProcessing) {
+              final screenHeight = MediaQuery.of(context).size.height;
+              return Center(
+                child: SizedBox(
+                    height: screenHeight * 0.1,
+                    width: screenHeight * 0.1,
+                    child: const LoadingIndicator()),
+              );
+            }
+            return _body(context, theme);
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: BlocConsumer<SignUpBloc, SignUpState>(
-            listener: (context, state) {
-              if (state is SignUpSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text(AppLanguage.successPleaseLogin)));
-                Navigator.of(context).pop();
-              }
-              if (state is SignUpError) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(state.message)));
-              }
-            },
-            builder: (context, state) {
-              if (state is SignUpProcessing) {
-                final screenHeight = MediaQuery.of(context).size.height;
-                return Center(
-                  child: SizedBox(
-                      height: screenHeight * 0.1,
-                      width: screenHeight * 0.1,
-                      child: const LoadingIndicator()),
-                );
-              }
-              return _signupForm(context);
-            },
+      ),
+    );
+  }
+
+  Widget _body(context, theme) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(40),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: [
+                Expanded(flex: 4, child: _heading(theme)),
+                Expanded(flex: 15, child: _signupForm(context, theme)),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Form _signupForm(BuildContext context) {
+  Column _heading(theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Opacity(
+                opacity: 0.8, child: Image.asset(Assets.appLogo, height: 50)),
+          ],
+        ),
+        const Spacer(),
+        Text(
+          'Sign Up',
+          style: GoogleFonts.montserrat(
+              fontSize: 34,
+              color: theme.primaryText,
+              fontWeight: FontWeight.w700),
+        ),
+        Text(
+          'Create a new account',
+          style: GoogleFonts.montserrat(
+              fontSize: 16,
+              color: theme.secondaryText,
+              fontWeight: FontWeight.w300),
+        ),
+        const Space(
+          heightFactor: 4,
+        ),
+      ],
+    );
+  }
+
+  Form _signupForm(BuildContext context, CrustTheme theme) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
+          const Space(),
+          TextInput(
             controller: _fullNameController,
-            decoration: const InputDecoration(
-              labelText: AppLanguage.fullName,
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter your full name';
-              }
-              return null;
-            },
+            hintText: AppLanguage.fullName,
+            trailing: Icons.person,
           ),
-          TextFormField(
+          const Space(
+            heightFactor: 3,
+          ),
+          TextInput(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: AppLanguage.email,
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter your email';
-              }
-              // Add email validation logic here
-              return null;
-            },
+            hintText: AppLanguage.email,
+            trailing: Icons.alternate_email_rounded,
           ),
-          TextFormField(
+          const Space(
+            heightFactor: 3,
+          ),
+          TextInput(
             controller: _passwordController,
-            decoration: const InputDecoration(
-              labelText: AppLanguage.password,
-            ),
+            hintText: AppLanguage.password,
             obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter a password';
-              }
-              // Add password validation logic here
-              return null;
-            },
+            trailing: Icons.lock,
           ),
-          TextFormField(
+          const Space(
+            heightFactor: 3,
+          ),
+          TextInput(
             controller: _confirmPasswordController,
-            decoration: const InputDecoration(
-              labelText: AppLanguage.confirmPassword,
-            ),
+            hintText: AppLanguage.confirmPassword,
             obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please confirm your password';
-              }
-              if (value != _passwordController.text) {
-                return 'Passwords dont match';
-              }
-              // Add password confirmation logic here
-              return null;
-            },
+            trailing: Icons.lock,
           ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
+          const Space(
+            heightFactor: 6,
+          ),
+          PrimaryButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 final MyUser myUser = MyUser(
@@ -143,8 +177,16 @@ class _SignupScreenState extends State<SignupScreen> {
                     myUser: myUser, password: _passwordController.text));
               }
             },
-            child: const Text(AppLanguage.signUp),
+            text: AppLanguage.signUp,
           ),
+          const Space(
+            heightFactor: 2,
+          ),
+          Text(
+            'By continuing, you agree to our Terms of Services and Privacy policy',
+            style: GoogleFonts.rubik(color: theme.secondaryText, fontSize: 13),
+            textAlign: TextAlign.center,
+          )
         ],
       ),
     );

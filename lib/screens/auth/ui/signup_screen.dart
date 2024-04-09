@@ -77,12 +77,13 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget _body(context, theme) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: SingleChildScrollView(
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
             child: Column(
               children: [
+                const Space(heightFactor: 4),
                 Expanded(flex: 4, child: _heading(theme)),
                 Expanded(flex: 15, child: _signupForm(context, theme)),
               ],

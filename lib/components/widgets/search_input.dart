@@ -1,8 +1,12 @@
 import 'dart:ui';
 
+import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:crust_and_co/blocs/authentication_bloc/authentication_events.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchInput extends StatelessWidget {
@@ -47,9 +51,14 @@ class SearchInput extends StatelessWidget {
                   ),
                 ),
                 const Space(),
-                const Icon(
-                  CupertinoIcons.cart,
-                  color: Colors.grey,
+                GestureDetector(
+                  onTap: () {
+                    context.read<AuthenticationBloc>().add(SignOutRequested());
+                  },
+                  child: const Icon(
+                    CupertinoIcons.cart,
+                    color: Colors.grey,
+                  ),
                 ),
               ],
             ),

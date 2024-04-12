@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         DefaultTabController(
           length: 3,
           child: Scaffold(
-            backgroundColor: const Color(0xff15181D).withOpacity(opacity),
+            backgroundColor:
+                const Color(0xff15181D).withOpacity(max(opacity, 0.3)),
             body: SafeArea(
               child: NestedScrollView(
                 controller: _scrollController,
@@ -80,15 +81,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       delegate: _SliverAppBarDelegate(CustomTabBar(
                         tabController: tabbarController,
                         tabs: const [
-                          Tab(
-                            text: 'Drinks',
-                          ),
-                          Tab(
-                            text: 'Pizzas',
-                          ),
-                          Tab(
-                            text: 'Extras',
-                          ),
+                          Tab(text: 'Drinks'),
+                          Tab(text: 'Pizzas'),
+                          Tab(text: 'Extras'),
                         ],
                       )),
                       pinned: true,

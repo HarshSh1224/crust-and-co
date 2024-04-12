@@ -23,5 +23,10 @@ class AuthenticationBloc
         emit(const AuthenticationState.unauthenticated());
       }
     });
+
+    on<SignOutRequested>(((event, emit) {
+      userRepository.signOut();
+      emit(const AuthenticationState.unauthenticated());
+    }));
   }
 }

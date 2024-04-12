@@ -7,3 +7,5 @@ class AuthenticationUserChanged extends AuthenticationEvent {
 
   AuthenticationUserChanged(this.user);
 }
+
+class SignOutRequested extends AuthenticationEvent {}

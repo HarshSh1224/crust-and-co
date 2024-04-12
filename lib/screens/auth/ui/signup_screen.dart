@@ -5,6 +5,7 @@ import 'package:crust_and_co/components/widgets/primary_button.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/app_language.dart';
+import 'package:crust_and_co/constants/app_methods.dart';
 import 'package:crust_and_co/constants/assets.dart';
 import 'package:crust_and_co/screens/auth/sign_up_bloc/sign_up_bloc.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +54,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Navigator.of(context).pop();
             }
             if (state is SignUpError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              AppMethods.showSnackbar(context, state.message);
             }
           },
           builder: (context, state) {

@@ -8,6 +8,7 @@ import 'package:crust_and_co/components/widgets/primary_button.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/app_language.dart';
+import 'package:crust_and_co/constants/app_methods.dart';
 import 'package:crust_and_co/constants/assets.dart';
 import 'package:crust_and_co/screens/auth/sign_in_bloc/sign_in_bloc.dart';
 import 'package:crust_and_co/screens/auth/ui/signup_screen.dart';
@@ -42,8 +43,7 @@ class SigninScreen extends StatelessWidget {
               Navigator.of(context).pop();
             }
             if (state is SignInError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              AppMethods.showSnackbar(context, state.message);
             }
           },
           builder: (context, state) {
@@ -137,7 +137,7 @@ class SigninScreen extends StatelessWidget {
         TextInput(
           controller: emailController,
           hintText: AppLanguage.email,
-          trailing: Icons.person,
+          trailing: Icons.alternate_email_rounded,
         ),
         const Space(heightFactor: 3),
         TextInput(
@@ -165,7 +165,7 @@ class SigninScreen extends StatelessWidget {
             ),
             HyperlinkedText(
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => SignupScreen(userRepository)));
               },
               text: 'Sign Up',

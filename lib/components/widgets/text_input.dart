@@ -1,4 +1,5 @@
 import 'package:crust_and_co/blocs/theme_bloc/theme_bloc.dart';
+import 'package:crust_and_co/components/widgets/primary_card.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,24 +20,9 @@ class TextInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = BlocProvider.of<ThemeBloc>(context).crustTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+    return PrimaryCard(
       height: 60,
-      decoration: BoxDecoration(
-        color: theme.card,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-              blurRadius: 15,
-              offset: const Offset(1, 5),
-              color: Colors.black.withOpacity(0.9),
-              spreadRadius: 2)
-        ],
-        border: Border.all(
-          color: theme.cardStroke,
-          width: 2,
-        ),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Center(
         child: Row(
           children: [

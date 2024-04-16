@@ -4,6 +4,7 @@ import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart'
 import 'package:crust_and_co/components/widgets/search_input.dart';
 import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/assets.dart';
+import 'package:crust_and_co/screens/home/pizza/pizza_tab_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         Image.asset(
           Assets.homeBgImage,
           height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
         ),
         DefaultTabController(
@@ -94,8 +96,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   controller: tabbarController,
                   children: const [
                     // Your tab views go here
-                    Tab1Content(),
                     Tab2Content(),
+                    PizzaTabContent(),
                     Tab3Content(),
                   ],
                 ),
@@ -135,20 +137,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 // Define your tab contents as separate widgets
-class Tab1Content extends StatelessWidget {
-  const Tab1Content({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-          title: Text(
-        'Item $index',
-        style: const TextStyle(color: Colors.white),
-      )),
-    );
-  }
-}
 
 class Tab2Content extends StatelessWidget {
   const Tab2Content({super.key});

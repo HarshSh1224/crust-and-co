@@ -82,10 +82,12 @@ class DatabaseUserRepo implements UserRepository {
 
   @override
   Future<bool> trySignIn([bool canRefreshToken = true]) async {
+    print('trying signin');
     _accessToken = await DevicePreferences.getAccessToken();
     _refreshToken = await DevicePreferences.getRefreshToken();
 
     if (_accessToken != null && _refreshToken != null) {
+      print('getting current user');
       try {
         final response = await _api.sendRequest.get(
           ApiRoutes.currentUser,
@@ -98,6 +100,7 @@ class DatabaseUserRepo implements UserRepository {
           _myUser = MyUser.fromMap(response.data[RepoConstants.data]);
           return true;
         } else {
+          print('err');
           print(response.data[RepoConstants.message] ?? response.statusMessage);
         }
       } on DioException catch (e) {
@@ -116,6 +119,8 @@ class DatabaseUserRepo implements UserRepository {
 
               return trySignIn(false);
             }
+          } else {
+            print(e.message);
           }
         } on DioException catch (e) {
           print(e.response?.data[RepoConstants.message] ??

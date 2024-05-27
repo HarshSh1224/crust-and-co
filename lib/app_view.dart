@@ -8,6 +8,7 @@ import 'package:crust_and_co/screens/home/home.dart';
 import 'package:crust_and_co/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
 class MyAppView extends StatelessWidget {
@@ -42,7 +43,7 @@ class MyAppView extends StatelessWidget {
     if (state.status == AuthenticationStatus.unknown) {
       return const SplashScreen();
     } else if (state.status == AuthenticationStatus.authenticated) {
-      return const HomeScreen();
+      return HomeScreen(DatabaseFoodRepo());
     } else {
       return WelcomeScreen(userRepository);
     }

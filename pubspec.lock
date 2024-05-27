@@ -136,6 +136,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  food_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/food_items_repository"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   google_fonts:
     dependency: "direct main"
     description:

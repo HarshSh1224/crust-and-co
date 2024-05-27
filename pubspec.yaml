@@ -37,6 +37,8 @@ dependencies:
   google_fonts: ^6.2.0
   user_repository:
     path: ./packages/user_repository
+  food_repository:
+    path: ./packages/food_items_repository
 
 dev_dependencies:
 

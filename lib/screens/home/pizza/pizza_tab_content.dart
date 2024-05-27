@@ -1,13 +1,16 @@
 import 'package:crust_and_co/blocs/theme_bloc/crust_theme.dart';
 import 'package:crust_and_co/blocs/theme_bloc/theme_bloc.dart';
-import 'package:crust_and_co/components/widgets/pizza_card.dart';
+import 'package:crust_and_co/components/widgets/loading_indicator.dart';
+import 'package:crust_and_co/components/widgets/food_item_card.dart';
 import 'package:crust_and_co/components/widgets/primary_card.dart';
 import 'package:crust_and_co/components/widgets/space.dart';
 import 'package:crust_and_co/constants/assets.dart';
+import 'package:crust_and_co/screens/home/bloc/food_items_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PizzaTabContent extends StatelessWidget {
@@ -15,17 +18,38 @@ class PizzaTabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      child: Column(
-        children: [ItalianPizzas(), ChicagoStylePizzas(), SicilianPizza()],
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: BlocBuilder<FoodItemsBloc, FoodItemsState>(
+        builder: (context, state) {
+          if(state is FoodItemsInitialState) return const LoadingIndicator();
+
+          if(state is FoodItemsLoadedState) {
+          
+            final italianPizzas = state.foodItems.where((element) => element.pizzaCategory == PizzaCategory.italian).toList();
+            final chicagoPizzas = state.foodItems.where((element) => element.pizzaCategory == PizzaCategory.chicagoStyle).toList();
+            final sciilianPizzas = state.foodItems.where((element) => element.pizzaCategory == PizzaCategory.sicilianPizza).toList();
+
+            return Column(
+              children: [
+                ItalianPizzas(italianPizzas), 
+                const Space(heightFactor: 3,),
+                ChicagoStylePizzas(chicagoPizzas), 
+                const Space(heightFactor: 3,),
+                SicilianPizza(sciilianPizzas)],
+            );
+          }
+          return Container();
+        },
       ),
     );
   }
 }
 
 class ItalianPizzas extends StatelessWidget {
-  const ItalianPizzas({super.key});
+  ItalianPizzas(this.pizzas, {super.key});
+
+  List<FoodItem> pizzas;
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +73,17 @@ class ItalianPizzas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: (170 * 3) + 50,
+                width: (170 * pizzas.length) + 50,
                 height: MediaQuery.of(context).size.height * 0.37,
-                child: const SingleChildScrollView(
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
                     width: 0,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        // Positioned(left: 680, child: PizzaCard()),
-                        // Positioned(left: 510, child: PizzaCard()),
-                        Positioned(left: 340, child: PizzaCard()),
-                        Positioned(left: 170, child: PizzaCard()),
-                        Positioned(left: 0, child: PizzaCard()),
+                        for(int i = pizzas.length - 1; i >= 0; i--) 
+                          Positioned(left: 170.0 * i, child: FoodItemCard(pizzas[i])),
                       ],
                     ),
                   ),
@@ -75,7 +96,9 @@ class ItalianPizzas extends StatelessWidget {
 }
 
 class ChicagoStylePizzas extends StatelessWidget {
-  const ChicagoStylePizzas({super.key});
+  ChicagoStylePizzas(this.pizzas, {super.key});
+
+  List<FoodItem> pizzas;
 
   @override
   Widget build(BuildContext context) {
@@ -99,20 +122,17 @@ class ChicagoStylePizzas extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: (170 * 3) + 50,
+                width: (170 * pizzas.length) + 50,
                 height: MediaQuery.of(context).size.height * 0.37,
-                child: const SingleChildScrollView(
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: SizedBox(
                     width: 0,
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        // Positioned(left: 680, child: PizzaCard()),
-                        // Positioned(left: 510, child: PizzaCard()),
-                        Positioned(left: 340, child: PizzaCard()),
-                        Positioned(left: 170, child: PizzaCard()),
-                        Positioned(left: 0, child: PizzaCard()),
+                        for(int i = pizzas.length - 1; i >= 0; i--) 
+                          Positioned(left: 170.0 * i, child: FoodItemCard(pizzas[i])),
                       ],
                     ),
                   ),
@@ -125,7 +145,9 @@ class ChicagoStylePizzas extends StatelessWidget {
 }
 
 class SicilianPizza extends StatelessWidget {
-  const SicilianPizza({super.key});
+  SicilianPizza(this.pizzas, {super.key});
+
+  List<FoodItem> pizzas;
 
   @override
   Widget build(BuildContext context) {
@@ -145,20 +167,17 @@ class SicilianPizza extends StatelessWidget {
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SizedBox(
-          width: (170 * 3) + 50,
+          width: (170 * pizzas.length) + 50,
           height: MediaQuery.of(context).size.height * 0.37,
-          child: const SingleChildScrollView(
+          child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
               width: 0,
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // Positioned(left: 680, child: PizzaCard()),
-                  // Positioned(left: 510, child: PizzaCard()),
-                  Positioned(left: 340, child: PizzaCard()),
-                  Positioned(left: 170, child: PizzaCard()),
-                  Positioned(left: 0, child: PizzaCard()),
+                  for(int i = pizzas.length - 1; i >= 0; i--) 
+                    Positioned(left: 170.0 * i, child: FoodItemCard(pizzas[i])),
                 ],
               ),
             ),

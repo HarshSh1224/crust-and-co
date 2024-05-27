@@ -8,8 +8,8 @@ class FoodItem {
   PizzaCategory? pizzaCategory;
   String title;
   double price;
-  int calories;
-  int diameter;
+  String calories;
+  String prop1;
   String description;
   String imageUrl;
 
@@ -20,7 +20,7 @@ class FoodItem {
     required this.title,
     required this.price,
     required this.calories,
-    required this.diameter,
+    required this.prop1,
     required this.description,
     required this.imageUrl,
   });
@@ -33,7 +33,7 @@ class FoodItem {
       'title': title,
       'price': price,
       'calories': calories,
-      'diameter': diameter,
+      'diameter': prop1,
       'description': description,
       'imageUrl': imageUrl,
     };
@@ -41,15 +41,15 @@ class FoodItem {
 
   static FoodItem fromMap(Map<String, dynamic> map) {
     return FoodItem(
-      id: map['id'],
-      type: FoodType.values[map['type']],
+      id: "map['id']",
+      type: FoodType.values.firstWhere((element) => element.name == map['type'], orElse: () => FoodType.pizza),
       pizzaCategory: map['pizzaCategory'] != null
-          ? PizzaCategory.values[map['pizzaCategory']]
+          ? PizzaCategory.values.firstWhere((element) => element.name == map['pizzaCategory'], orElse: () => PizzaCategory.italian)
           : null,
       title: map['title'],
-      price: map['price'].toDouble(),
-      calories: map['calories'],
-      diameter: map['diameter'],
+      price: double.parse(map['price']),
+      calories: map['calories'].toString(),
+      prop1: map['diameter'].toString(),
       description: map['description'],
       imageUrl: map['imageUrl'],
     );

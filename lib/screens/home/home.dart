@@ -4,15 +4,19 @@ import 'package:crust_and_co/blocs/authentication_bloc/authentication_bloc.dart'
 import 'package:crust_and_co/components/widgets/search_input.dart';
 import 'package:crust_and_co/components/widgets/text_input.dart';
 import 'package:crust_and_co/constants/assets.dart';
+import 'package:crust_and_co/screens/home/bloc/food_items_bloc.dart';
 import 'package:crust_and_co/screens/home/pizza/pizza_tab_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_repository/food_repository.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:user_repository/user_repository.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen(this.foodRepository, {super.key});
+
+  final FoodRepository foodRepository;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -45,67 +49,70 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset(
-          Assets.homeBgImage,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
-        DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            backgroundColor:
-                const Color(0xff15181D).withOpacity(max(opacity, 0.3)),
-            body: SafeArea(
-              child: NestedScrollView(
-                controller: _scrollController,
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverAppBar(
-                      surfaceTintColor: Colors.transparent,
-                      // pinned: true,
-                      title: const Row(
-                        children: [Expanded(child: SearchInput())],
-                      ),
-                      expandedHeight: 350.0, // Adjust as needed
-                      backgroundColor: Colors.transparent,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Opacity(
-                            opacity: 1 - opacity,
-                            child:
-                                const YourHeaderWidget()), // Replace with your header widget
-                      ),
+    return BlocProvider(
+      create: (context) => FoodItemsBloc(widget.foodRepository),
+      child: Stack(
+          children: [
+            Image.asset(
+              Assets.homeBgImage,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+            ),
+            DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                backgroundColor:
+                    const Color(0xff15181D).withOpacity(max(opacity, 0.3)),
+                body: SafeArea(
+                  child: NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverAppBar(
+                          surfaceTintColor: Colors.transparent,
+                          // pinned: true,
+                          title: const Row(
+                            children: [Expanded(child: SearchInput())],
+                          ),
+                          expandedHeight: 350.0, // Adjust as needed
+                          backgroundColor: Colors.transparent,
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Opacity(
+                                opacity: 1 - opacity,
+                                child:
+                                    const YourHeaderWidget()), // Replace with your header widget
+                          ),
+                        ),
+                        SliverPersistentHeader(
+                          delegate: _SliverAppBarDelegate(CustomTabBar(
+                            tabController: tabbarController,
+                            tabs: const [
+                              Tab(text: 'Drinks'),
+                              Tab(text: 'Pizzas'),
+                              Tab(text: 'Extras'),
+                            ],
+                          )),
+                          pinned: true,
+                        ),
+                      ];
+                    },
+                    body: TabBarView(
+                      controller: tabbarController,
+                      children: const [
+                        // Your tab views go here
+                        Tab2Content(),
+                        PizzaTabContent(),
+                        Tab3Content(),
+                      ],
                     ),
-                    SliverPersistentHeader(
-                      delegate: _SliverAppBarDelegate(CustomTabBar(
-                        tabController: tabbarController,
-                        tabs: const [
-                          Tab(text: 'Drinks'),
-                          Tab(text: 'Pizzas'),
-                          Tab(text: 'Extras'),
-                        ],
-                      )),
-                      pinned: true,
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  controller: tabbarController,
-                  children: const [
-                    // Your tab views go here
-                    Tab2Content(),
-                    PizzaTabContent(),
-                    Tab3Content(),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
     );
   }
 }
